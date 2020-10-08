@@ -25,6 +25,12 @@ import html5lib
 # https://requests.readthedocs.io/en/master/
 import requests
 
+# https://www.tutorialspoint.com/matplotlib/matplotlib_bar_plot.htm
+import numpy as np
+import matplotlib.pyplot as plt
+
+from datetime import date
+
 URL="https://www.sheffield.ac.uk/autumn-term-2020/covid-19-statistics/"
 
 
@@ -36,6 +42,8 @@ def main():
     data = transform(validated)
     for row in data:
         print(row)
+
+    createVisualisations(data)
 
 
 def transform(rows):
@@ -106,6 +114,56 @@ def validate(table):
 
     return validated
 
+def createVisualisations(data):    
+    dateColumn = 0
+    staffColumn = 1
+    studentColumn = 2
+
+    dates = []
+    staffValues = []
+    studentValues = []
+
+    for row in data:
+        dates.append(row[dateColumn])
+        staffValues.append(row[staffColumn])
+        studentValues.append(row[studentColumn])
+
+    # Similar implementation to https://matplotlib.org/3.1.1/gallery/lines_bars_and_markers/barchart.html
+    locations = np.arange(len(dates))
+    bar_width = 0.35
+
+    figure, axes = plt.subplots()
+
+    staff_bars = axes.bar(locations - bar_width / 2, staffValues, bar_width, label = 'Staff')
+    student_bars = axes.bar(locations + bar_width / 2, studentValues, bar_width, label = 'Students')
+
+    axes.set_title('Number of cases in staff and student populations')
+    axes.set_xlabel('Date')
+    axes.set_xticks(locations)
+    axes.set_xticklabels(dates)
+    axes.set_ylabel('Cases')
+    axes.legend()
+
+    addColumnLabels(staff_bars, axes)
+    addColumnLabels(student_bars, axes)
+
+    rect = [0.02, 0.02, 0.98, 0.95]
+
+    plt.xticks(rotation = 90)
+    plt.tight_layout(pad = 1.2, h_pad = None, w_pad = None, rect = rect)
+    plt.margins(0.02, 0.1)
+
+    filename = str(date.today()) + "-staff-student-covid-cases.png"
+    plt.savefig(filename, dpi=600)
+
+def addColumnLabels(bars, axes):
+    for bar in bars:
+        height = bar.get_height()
+        axes.annotate('{}'.format(height),
+                      xy = (bar.get_x() + bar.get_width() / 2, height),
+                      xytext = (0, 3), # Offset label by 3pt above bar
+                      textcoords = "offset points",
+                      ha = 'center', va = 'bottom') # horizontal/vertical align
 
 if __name__ == "__main__":
     main()

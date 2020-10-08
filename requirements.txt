@@ -2,3 +2,4 @@ python-dateutil==2.8
 html5lib==1.1
 requests==2.24
 black # not required but recommended
+matplotlib==3.3.2
