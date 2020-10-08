@@ -18,11 +18,12 @@ The flow is approximately:
 # https://docs.python.org/3/library/xml.etree.elementtree.html
 import xml.etree
 
-# https://requests.readthedocs.io/en/master/
-import requests
-
+# https://dateutil.readthedocs.io/en/2.8.1/
+import dateutil.parser
 # https://pypi.org/project/html5lib/
 import html5lib
+# https://requests.readthedocs.io/en/master/
+import requests
 
 URL="https://www.sheffield.ac.uk/autumn-term-2020/covid-19-statistics/"
 
@@ -32,8 +33,31 @@ def main():
 
     table = extract(dom)
     validated = validate(table)
-    for row in validated:
+    data = transform(validated)
+    for row in data:
         print(row)
+
+
+def transform(rows):
+    """
+    The input is a list of rows, each row is a list of strings.
+    The return value is a list of rows, each row is a list of
+    data values.
+    Dates in the first cell, are transformed into ISO 8601 date
+    strings of the form YYYY-MM-DD;
+    Numbers in subsequent cells, are transformed into int.
+
+    For your convenience, the output is sorted.
+    """
+
+    result = []
+    for row in rows:
+        iso_date = str(dateutil.parser.parse(row[0]).date())
+        out = [iso_date]
+        out.extend(int(x) for x in row[1:])
+        result.append(out)
+
+    return sorted(result)
 
 
 def extract(dom):
