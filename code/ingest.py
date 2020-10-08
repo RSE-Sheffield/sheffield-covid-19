@@ -31,7 +31,9 @@ def main():
     dom = fetch()
 
     table = extract(dom)
-    print(table)
+    validated = validate(table)
+    for row in validated:
+        print(row)
 
 
 def extract(dom):
@@ -58,6 +60,27 @@ def fetch():
     dom = html5lib.parse(response.text, namespaceHTMLElements=False)
 
     return dom
+
+
+def validate(table):
+    """
+    `table` should be a table of strings in list of list format.
+    Each row is checked to see if it is of the expected format.
+    A fresh table is returned (some rows are removed because
+    they are "metadata").
+    Invalid inputs will result in an Exception being raised.
+    """
+
+    validated = []
+
+    for row in table:
+        if "Day" in row[0]:
+            assert "New staff" in row[1]
+            assert "New student" in row[2]
+            continue
+        validated.append(row)
+
+    return validated
 
 
 if __name__ == "__main__":
