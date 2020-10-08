@@ -6,6 +6,12 @@ The best target page to scrape is: https://www.sheffield.ac.uk/autumn-term-2020/
 
 This is currently in development.
 
+After installing Python requirements (see below),
+run the code:
+
+    python code/ingest.py
+
+
 # Installing the development edition
 
 Please create a conda environment:
