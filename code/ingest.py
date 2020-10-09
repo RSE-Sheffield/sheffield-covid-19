@@ -17,7 +17,12 @@ The flow is approximately:
 
 # https://docs.python.org/3/library/xml.etree.elementtree.html
 import xml.etree
-
+# https://docs.python.org/3/library/argparse.html
+import argparse
+# https://docs.python.org/3/library/csv.html
+import csv
+# https://docs.python.org/3/library/json.html
+import json
 # https://dateutil.readthedocs.io/en/2.8.1/
 import dateutil.parser
 # https://pypi.org/project/html5lib/
@@ -35,6 +40,12 @@ URL="https://www.sheffield.ac.uk/autumn-term-2020/covid-19-statistics/"
 
 
 def main():
+# Argument Parsing    
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--csv', type=str, help='Store result in .CSV file', dest='csv_file', required=False)
+    parser.add_argument('--json', type=str, help='Store result in .JSON file', dest='json_file', required=False)
+    args = parser.parse_args()
+    
     dom = fetch()
 
     table = extract(dom)
@@ -44,6 +55,18 @@ def main():
         print(row)
 
     createVisualisations(data)
+
+# Converting output to CSV or JSON based on user input
+    if args.csv_file is not None:
+        file = args.csv_file
+        with open(file, "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(["Date", "New staff cases", "New student cases"])
+            writer.writerows(data) 
+    elif args.json_file is not None:
+        file = args.json_file
+        with open(file, 'w') as f:
+            f.write(json.dumps(data))
 
 
 def transform(rows):
