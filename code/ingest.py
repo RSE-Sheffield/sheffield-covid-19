@@ -17,16 +17,22 @@ The flow is approximately:
 
 # https://docs.python.org/3/library/xml.etree.elementtree.html
 import xml.etree
+
 # https://docs.python.org/3/library/argparse.html
 import argparse
+
 # https://docs.python.org/3/library/csv.html
 import csv
+
 # https://docs.python.org/3/library/json.html
 import json
+
 # https://dateutil.readthedocs.io/en/2.8.1/
 import dateutil.parser
+
 # https://pypi.org/project/html5lib/
 import html5lib
+
 # https://requests.readthedocs.io/en/master/
 import requests
 
@@ -36,16 +42,28 @@ import matplotlib.pyplot as plt
 
 from datetime import date
 
-URL="https://www.sheffield.ac.uk/autumn-term-2020/covid-19-statistics/"
+URL = "https://www.sheffield.ac.uk/autumn-term-2020/covid-19-statistics/"
 
 
 def main():
-# Argument Parsing    
+    # Argument Parsing
     parser = argparse.ArgumentParser()
-    parser.add_argument('--csv', type=str, help='Store result in .CSV file', dest='csv_file', required=False)
-    parser.add_argument('--json', type=str, help='Store result in .JSON file', dest='json_file', required=False)
+    parser.add_argument(
+        "--csv",
+        type=str,
+        help="Store result in .CSV file",
+        dest="csv_file",
+        required=False,
+    )
+    parser.add_argument(
+        "--json",
+        type=str,
+        help="Store result in .JSON file",
+        dest="json_file",
+        required=False,
+    )
     args = parser.parse_args()
-    
+
     dom = fetch()
 
     table = extract(dom)
@@ -56,16 +74,16 @@ def main():
 
     createVisualisations(data)
 
-# Converting output to CSV or JSON based on user input
+    # Converting output to CSV or JSON based on user input
     if args.csv_file is not None:
         file = args.csv_file
         with open(file, "w", newline="") as f:
             writer = csv.writer(f)
             writer.writerow(["Date", "New staff cases", "New student cases"])
-            writer.writerows(data) 
+            writer.writerows(data)
     elif args.json_file is not None:
         file = args.json_file
-        with open(file, 'w') as f:
+        with open(file, "w") as f:
             f.write(json.dumps(data))
 
 
@@ -137,7 +155,8 @@ def validate(table):
 
     return validated
 
-def createVisualisations(data):    
+
+def createVisualisations(data):
     dateColumn = 0
     staffColumn = 1
     studentColumn = 2
@@ -157,14 +176,18 @@ def createVisualisations(data):
 
     figure, axes = plt.subplots()
 
-    staff_bars = axes.bar(locations - bar_width / 2, staffValues, bar_width, label = 'Staff')
-    student_bars = axes.bar(locations + bar_width / 2, studentValues, bar_width, label = 'Students')
+    staff_bars = axes.bar(
+        locations - bar_width / 2, staffValues, bar_width, label="Staff"
+    )
+    student_bars = axes.bar(
+        locations + bar_width / 2, studentValues, bar_width, label="Students"
+    )
 
-    axes.set_title('Number of cases in staff and student populations')
-    axes.set_xlabel('Date')
+    axes.set_title("Number of cases in staff and student populations")
+    axes.set_xlabel("Date")
     axes.set_xticks(locations)
     axes.set_xticklabels(dates)
-    axes.set_ylabel('Cases')
+    axes.set_ylabel("Cases")
     axes.legend()
 
     addColumnLabels(staff_bars, axes)
@@ -172,21 +195,26 @@ def createVisualisations(data):
 
     rect = [0.02, 0.02, 0.98, 0.95]
 
-    plt.xticks(rotation = 90)
-    plt.tight_layout(pad = 1.2, h_pad = None, w_pad = None, rect = rect)
+    plt.xticks(rotation=90)
+    plt.tight_layout(pad=1.2, h_pad=None, w_pad=None, rect=rect)
     plt.margins(0.02, 0.1)
 
     filename = str(date.today()) + "-staff-student-covid-cases.png"
     plt.savefig(filename, dpi=600)
 
+
 def addColumnLabels(bars, axes):
     for bar in bars:
         height = bar.get_height()
-        axes.annotate('{}'.format(height),
-                      xy = (bar.get_x() + bar.get_width() / 2, height),
-                      xytext = (0, 3), # Offset label by 3pt above bar
-                      textcoords = "offset points",
-                      ha = 'center', va = 'bottom') # horizontal/vertical align
+        axes.annotate(
+            "{}".format(height),
+            xy=(bar.get_x() + bar.get_width() / 2, height),
+            xytext=(0, 3),  # Offset label by 3pt above bar
+            textcoords="offset points",
+            ha="center",
+            va="bottom",
+        )  # horizontal/vertical align
+
 
 if __name__ == "__main__":
     main()
