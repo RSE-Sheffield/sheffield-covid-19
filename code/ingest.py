@@ -151,6 +151,8 @@ def validate(table):
             assert "New staff" in row[1]
             assert "New student" in row[2]
             continue
+
+        row = [cell_value[:-1] if cell_value.endswith('*') else cell_value for cell_value in row]
         validated.append(row)
 
     return validated
