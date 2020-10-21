@@ -72,7 +72,7 @@ def main():
     for row in data:
         print(row)
 
-    createVisualisations(data)
+    create_visualisations(data)
 
     # Converting output to CSV or JSON based on user input
     if args.csv_file is not None:
@@ -158,19 +158,19 @@ def validate(table):
     return validated
 
 
-def createVisualisations(data):
-    dateColumn = 0
-    staffColumn = 1
+def create_visualisations(data):
+    date_column = 0
+    staff_column = 1
     studentColumn = 2
 
     dates = []
-    staffValues = []
-    studentValues = []
+    staff_values = []
+    student_values = []
 
     for row in data:
-        dates.append(row[dateColumn])
-        staffValues.append(row[staffColumn])
-        studentValues.append(row[studentColumn])
+        dates.append(row[date_column])
+        staff_values.append(row[staff_column])
+        student_values.append(row[studentColumn])
 
     # Similar implementation to https://matplotlib.org/3.1.1/gallery/lines_bars_and_markers/barchart.html
     locations = np.arange(len(dates))
@@ -179,10 +179,10 @@ def createVisualisations(data):
     figure, axes = plt.subplots()
 
     staff_bars = axes.bar(
-        locations - bar_width / 2, staffValues, bar_width, label="Staff"
+        locations - bar_width / 2, staff_values, bar_width, label="Staff"
     )
     student_bars = axes.bar(
-        locations + bar_width / 2, studentValues, bar_width, label="Students"
+        locations + bar_width / 2, student_values, bar_width, label="Students"
     )
 
     axes.set_title("Number of cases in staff and student populations")
@@ -192,8 +192,8 @@ def createVisualisations(data):
     axes.set_ylabel("Cases")
     axes.legend()
 
-    addColumnLabels(staff_bars, axes)
-    addColumnLabels(student_bars, axes)
+    add_column_labels(staff_bars, axes)
+    add_column_labels(student_bars, axes)
 
     rect = [0.02, 0.02, 0.98, 0.95]
 
@@ -205,7 +205,7 @@ def createVisualisations(data):
     plt.savefig(filename, dpi=600)
 
 
-def addColumnLabels(bars, axes):
+def add_column_labels(bars, axes):
     for bar in bars:
         height = bar.get_height()
         axes.annotate(
