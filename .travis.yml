@@ -5,6 +5,8 @@ python:
 # command to install dependencies
 install:
   - pip install -r requirements.txt
+  - pip install typelint
 # command to run tests
 script:
   - python code/ingest.py || python3 code/ingest.py
+  - python -m typelint --quiet code/ingest.py
