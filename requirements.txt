@@ -3,3 +3,4 @@ html5lib==1.1
 requests==2.24
 black # not required but recommended
 matplotlib==3.3.2
+pytest==6.1.1
