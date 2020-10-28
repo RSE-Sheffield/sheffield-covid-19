@@ -64,11 +64,10 @@ def main():
     )
     args = parser.parse_args()
 
-    dom = fetch()
+    response = fetch()
 
-    table = extract(dom)
-    validated = validate(table)
-    data = transform(validated)
+    data = extract_transform_data(response)
+
     for row in data:
         print(row)
 
@@ -126,13 +125,12 @@ def extract(dom):
 
 def fetch():
     """
-    Fetch the web page and return it as a parsed DOM object.
+    Fetch the web page and return it
     """
 
     response = requests.get(URL)
-    dom = html5lib.parse(response.text, namespaceHTMLElements=False)
 
-    return dom
+    return response.text
 
 
 def validate(table):
@@ -156,6 +154,19 @@ def validate(table):
         validated.append(row)
 
     return validated
+
+
+def extract_transform_data(response_text):
+    """
+    extract, clean and transform relevant data to make it usable
+    """
+    dom = html5lib.parse(response_text, namespaceHTMLElements=False)
+
+    table = extract(dom)
+    validated = validate(table)
+    data = transform(validated)
+
+    return data
 
 
 def create_visualisations(data):

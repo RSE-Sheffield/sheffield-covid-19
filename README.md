@@ -10,6 +10,11 @@ After installing Python requirements (see below),
 run the code:
 
     python code/ingest.py
+    
+Tests can be run using
+
+    python -m pytest
+
 
 
 # Installing the development edition
