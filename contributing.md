@@ -1,10 +1,10 @@
 # Contributing
 
-This document explains how, technically, to contribute to this project. A code of conduct may be available in the root of this repository, or included in the readme.
+This document explains how, technically, to contribute to this project. A code of conduct may be available in the root of this repository, or included in the READEME.md file.
 
 ## Contribution Workflow
 
-* Ob GitHub check the issues and draft pull requests to see if anyone is working on something similar.
+* On GitHub, check the issues and draft pull requests to see if anyone is working on something similar.
 * Create a new issue or comment on an existing one, asking to be assigned.
 * Make a fork of this repository.
 * [Optionally] make a branch for your contribution.
@@ -19,7 +19,7 @@ You are advised to make a draft pull request as soon as you start work so nobody
 
 ## Documentation
 
-* documentation is required at approximately the same dilution
+* Documentation is required at approximately the same dilution
 as the existing code.
 Please avoid adding lots of types to the documentation
 like Sphinx encourages.
