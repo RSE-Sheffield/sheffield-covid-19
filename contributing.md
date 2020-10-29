@@ -31,7 +31,6 @@ like Sphinx encourages.
 ## Tests
 
 * Tests are encouraged; please use [`pytest`](https://docs.pytest.org/en/stable/).
-* There is 1 test.
 
 ## Static Analysis
 
