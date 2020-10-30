@@ -64,9 +64,9 @@ def main():
     )
     args = parser.parse_args()
 
-    response = fetch()
+    response_text = fetch()
 
-    data = extract_transform_data(response)
+    data = extract_transform_data(response_text)
 
     for row in data:
         print(row)
@@ -94,6 +94,7 @@ def transform(rows):
     Dates in the first cell, are transformed into ISO 8601 date
     strings of the form YYYY-MM-DD;
     Numbers in subsequent cells, are transformed into int.
+    Invalid inputs will result in an Exception being raised
 
     For your convenience, the output is sorted.
     """
@@ -108,12 +109,13 @@ def transform(rows):
     return sorted(result)
 
 
-def extract(dom):
+def extract(response_text):
     """
     Extract all the rows that plausibly contain data,
     and return them as a list of list of strings.
     """
 
+    dom = html5lib.parse(response_text, namespaceHTMLElements=False)
     rows = dom.findall(".//tr")
 
     result = []
@@ -139,7 +141,6 @@ def validate(table):
     Each row is checked to see if it is of the expected format.
     A fresh table is returned (some rows are removed because
     they are "metadata").
-    Invalid inputs will result in an Exception being raised.
     """
 
     validated = []
@@ -160,9 +161,8 @@ def extract_transform_data(response_text):
     """
     extract, clean and transform relevant data to make it usable
     """
-    dom = html5lib.parse(response_text, namespaceHTMLElements=False)
 
-    table = extract(dom)
+    table = extract(response_text)
     validated = validate(table)
     data = transform(validated)
 
