@@ -11,4 +11,4 @@ install:
 script:
   - python code/ingest.py || python3 code/ingest.py
   - python -m typelint --quiet code/ingest.py
-  - if !((python -m black --check)) ; then echo "Black formatter is required!"; fi
+  - python -m black --check
